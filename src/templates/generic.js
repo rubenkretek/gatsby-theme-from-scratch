@@ -1,9 +1,12 @@
-import React, { Component } from 'react'
+import React from 'react'
 
-export default class generic extends Component {
-    render() {
-        return (
-            <div>generic</div>
-        )
-    }
+export const generic = ({ pageContext }) => {
+    return (
+        <div>
+            <h1>{pageContext.title}</h1>
+            <p>{pageContext.pageText}</p>
+        </div>
+    )
 }
+
+export default generic;

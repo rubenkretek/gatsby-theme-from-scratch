@@ -1,16 +1,29 @@
 const path = require('path');
 const data = require('./data');
 
-exports.createPages = ({ actions }) => {
+exports.createPages = async ({ actions, graphql }) => {
     const { createPage } = actions;
-    console.log(data);
-    data.map(page => {
+
+    const portfolioItems = await graphql(`
+        query getPorfolioItems {
+            allMarkdownRemark {
+                edges {
+                  node {
+                    frontmatter {
+                      slug
+                    }
+                  }
+                }
+              }
+        }
+    `)
+
+    portfolioItems.data.allMarkdownRemark.edges.map(({ node }) => {
         createPage({
-            path: page.slug,
-            component: path.resolve('./src/templates/generic.js'),
+            path: node.frontmatter.slug,
+            component: path.resolve('./src/templates/Generic.js'),
             context: {
-                title: page.title,
-                pageText: page.pageText
+                slug: node.frontmatter.slug
             }
         })
     })
